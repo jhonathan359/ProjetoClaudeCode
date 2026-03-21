@@ -39,3 +39,24 @@ yfinance API → fetch_data() → dict[str, DataFrame]
 
 ### Ações monitoradas
 As três ações B3 estão definidas em `data.py:5` (`TICKERS`) e o período em `data.py:6` (`PERIOD`). Para adicionar novas ações, também é necessário incluir a cor correspondente em `app.py:6` (`COLORS`).
+
+## GitHub
+
+Repositório: [https://github.com/jhonathan359/ProjetoClaudeCode](https://github.com/jhonathan359/ProjetoClaudeCode)
+
+### Sincronização automática
+
+O projeto está configurado para sincronizar automaticamente com o GitHub ao final de cada resposta do Claude Code. O hook `Stop` em `.claude/settings.local.json` executa:
+
+```bash
+git add -A && git diff --cached --quiet || (git commit -m "auto: sync changes" && git push origin main)
+```
+
+Ou seja, toda alteração feita pelo Claude é commitada e enviada ao GitHub automaticamente.
+
+### Arquivos ignorados (não enviados ao GitHub)
+
+- `.venv/` — ambiente virtual Python
+- `__pycache__/` — cache do Python
+- `.env` — variáveis de ambiente sensíveis
+- `.claude/settings.local.json` — configurações locais (contém token do GitHub)
