@@ -4,7 +4,14 @@ from dash import Dash, dcc, html, dash_table
 from data import fetch_data, calc_cumulative_return, calc_monthly_volume, build_summary_table
 
 # --- Cores das ações ---
-COLORS = {"Petrobras": "#009c3b", "Itaú": "#0047CC", "Vale": "#0077b6"}
+COLORS = {
+    "Petrobras": "#009c3b",
+    "Itaú": "#0047CC",
+    "Vale": "#0077b6",
+    "Banco do Brasil": "#ca8a04",
+    "WEG": "#0d9488",
+    "Ambev": "#7c3aed",
+}
 
 # --- Design tokens ---
 PAGE_BG = "#f0f2f5"
@@ -15,7 +22,14 @@ TEXT_PRIMARY = "#1a2744"
 TEXT_SECONDARY = "#64748b"
 FONT = "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
 
-TICKER_MAP = {"Petrobras": "PETR4", "Itaú": "ITUB4", "Vale": "VALE3"}
+TICKER_MAP = {
+    "Petrobras": "PETR4",
+    "Itaú": "ITUB4",
+    "Vale": "VALE3",
+    "Banco do Brasil": "BBAS3",
+    "WEG": "WEGE3",
+    "Ambev": "ABEV3",
+}
 
 CHART_BASE = dict(
     plot_bgcolor=CARD_BG,
@@ -120,7 +134,7 @@ def section_card(title, subtitle, body):
 
 def kpi_card(row):
     empresa = row["Ação"]
-    variacao_str = row["Variação no Ano (%)"]
+    variacao_str = row["Variação no Período (%)"]
     is_positive = variacao_str.startswith("+")
     var_color = "#16a34a" if is_positive else "#dc2626"
     var_bg = "#f0fdf4" if is_positive else "#fef2f2"
@@ -184,7 +198,7 @@ def kpi_card(row):
 
 # --- App Dash ---
 app = Dash(__name__)
-app.title = "Dashboard de Ações B3 — 2025"
+app.title = "Dashboard de Ações B3 — Últimos 12 meses"
 
 kpi_cards = [kpi_card(row) for row in summary.to_dict("records")]
 
@@ -203,7 +217,7 @@ app.layout = html.Div(
                         "color": "#ffffff",
                         "letterSpacing": "-0.3px",
                     }),
-                    html.P("Petrobras (PETR4) · Itaú (ITUB4) · Vale (VALE3) · 2025", style={
+                    html.P("PETR4 · ITUB4 · VALE3 · BBAS3 · WEGE3 · ABEV3 · Últimos 12 meses", style={
                         "margin": "4px 0 0",
                         "fontSize": "13px",
                         "color": "rgba(255,255,255,0.55)",
@@ -242,21 +256,21 @@ app.layout = html.Div(
             # Gráfico 1
             section_card(
                 "Preço de Fechamento Ajustado",
-                "Evolução do preço de fechamento (R$) ao longo de 2025",
+                "Evolução do preço de fechamento (R$) nos últimos 12 meses",
                 dcc.Graph(figure=fig_price, config={"displayModeBar": False}),
             ),
 
             # Gráfico 2
             section_card(
                 "Performance Acumulada",
-                "Retorno percentual acumulado desde 01/01/2025",
+                "Retorno percentual acumulado nos últimos 12 meses",
                 dcc.Graph(figure=fig_perf, config={"displayModeBar": False}),
             ),
 
             # Gráfico 3
             section_card(
                 "Volume Médio Diário",
-                "Volume médio de negociações por mês em 2025",
+                "Volume médio de negociações por mês nos últimos 12 meses",
                 dcc.Graph(figure=fig_vol, config={"displayModeBar": False}),
             ),
 
@@ -318,7 +332,7 @@ app.layout = html.Div(
 
             # Footer
             html.Div([
-                html.P("Dados obtidos via Yahoo Finance · yfinance", style={
+                html.P("Dados obtidos via Yahoo Finance · yahooquery", style={
                     "margin": "0",
                     "fontSize": "12px",
                     "color": TEXT_SECONDARY,
